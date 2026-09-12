@@ -119,8 +119,8 @@ export const wedding = {
     },
   ] as Hotel[],
   whatsapp: {
-    javier: "34600000000",
-    carol: "34600000001",
+    javier: "34649233038",
+    carol: "34662098437",
   },
   bankAccount: {
     iban: "ES45 0182 5319 7500 0095 5634",
