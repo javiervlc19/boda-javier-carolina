@@ -9,10 +9,15 @@ export function Intro() {
           Bienvenidos
         </p>
         <p className="mt-8 font-display text-2xl leading-relaxed text-ink sm:text-3xl">
-          Después de años compartiendo camino, hemos decidido dar el paso más
-          bonito de nuestra vida juntos. Queremos celebrarlo rodeados de las
-          personas que más queremos, en un día lleno de sol, mar Mediterráneo
-          y buenos recuerdos.
+          Después de tantos años compartiendo camino, ha llegado el momento
+          de celebrar el nuestro.
+        </p>
+        <p className="mt-6 font-display text-2xl leading-relaxed text-ink sm:text-3xl">
+          Queremos hacerlo como más nos gusta: rodeados de nuestra gente,
+          disfrutando, riendo y creando recuerdos que nos acompañen siempre.
+        </p>
+        <p className="mt-6 font-display text-2xl leading-relaxed text-ink sm:text-3xl">
+          Qué bonito poder compartir este día con vosotros.
         </p>
         <p className="mt-6 font-display text-xl italic text-stone">
           {wedding.couple.groom} &amp; {wedding.couple.bride}

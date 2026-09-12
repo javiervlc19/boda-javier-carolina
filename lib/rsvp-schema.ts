@@ -1,4 +1,16 @@
 import { z } from "zod";
+import { wedding } from "@/data/wedding";
+
+const idaRouteValues = wedding.busRoutes
+  .filter((route) => route.direction === "ida")
+  .map((route) => route.name) as [string, ...string[]];
+
+const returnBusValues = [
+  "no",
+  ...wedding.busRoutes
+    .filter((route) => route.direction === "vuelta")
+    .map((route) => route.name),
+] as [string, ...string[]];
 
 export const rsvpSchema = z
   .object({
@@ -10,10 +22,8 @@ export const rsvpSchema = z
     companions: z.array(z.string().trim()).default([]),
     children: z.enum(["si", "no"]).default("no"),
     childrenCount: z.coerce.number().int().min(0).max(10).default(0),
-    busRoute: z
-      .enum(["ninguno", "Valencia", "Castellón", "Altura"])
-      .default("ninguno"),
-    returnBus: z.enum(["no", "01:00", "03:00", "otro"]).default("no"),
+    busRoutes: z.array(z.enum(idaRouteValues)).default([]),
+    returnBus: z.enum(returnBusValues).default("no"),
     dietaryRequirements: z.string().trim().default(""),
     notes: z.string().trim().default(""),
     song: z.string().trim().default(""),

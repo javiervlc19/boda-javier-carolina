@@ -31,7 +31,7 @@ export function RsvpForm() {
       companions: [],
       children: "no",
       childrenCount: 0,
-      busRoute: "ninguno",
+      busRoutes: [],
       returnBus: "no",
       dietaryRequirements: "",
       notes: "",
@@ -63,7 +63,9 @@ export function RsvpForm() {
       children_count:
         isAttending && values.children === "si" ? Number(values.childrenCount) : null,
       bus_route:
-        isAttending && values.busRoute !== "ninguno" ? values.busRoute : null,
+        isAttending && values.busRoutes && values.busRoutes.length > 0
+          ? values.busRoutes.join(" + ")
+          : null,
       return_bus: isAttending ? values.returnBus : null,
       dietary_requirements: isAttending ? values.dietaryRequirements || null : null,
       song: isAttending ? values.song || null : null,
@@ -115,10 +117,11 @@ export function RsvpForm() {
         >
           <div>
             <label className={labelClasses} htmlFor="name">
-              Nombre y apellidos
+              Nombre y apellidos *
             </label>
             <input
               id="name"
+              required
               className={inputClasses}
               {...register("name")}
             />
@@ -213,25 +216,30 @@ export function RsvpForm() {
                 </div>
               )}
 
-              <div>
-                <label className={labelClasses} htmlFor="busRoute">
-                  Autobús
-                </label>
-                <select
-                  id="busRoute"
-                  className={inputClasses}
-                  {...register("busRoute")}
-                >
-                  <option value="ninguno">No necesito autobús</option>
+              <fieldset>
+                <legend className={labelClasses}>Autobús de ida</legend>
+                <p className="mt-2 font-sans text-xs text-stone">
+                  Marca las etapas que necesites. Si sales desde Valencia,
+                  marca ambas.
+                </p>
+                <div className="mt-3 flex flex-col gap-3">
                   {wedding.busRoutes
                     .filter((route) => route.direction === "ida")
                     .map((route) => (
-                      <option key={route.name} value={route.name}>
-                        {route.name}
-                      </option>
+                      <label
+                        key={route.name}
+                        className="flex items-center gap-3 font-sans text-sm text-ink"
+                      >
+                        <input
+                          type="checkbox"
+                          value={route.name}
+                          {...register("busRoutes")}
+                        />
+                        {route.name} · {route.departureTime}h
+                      </label>
                     ))}
-                </select>
-              </div>
+                </div>
+              </fieldset>
 
               <div>
                 <label className={labelClasses} htmlFor="returnBus">
@@ -243,9 +251,13 @@ export function RsvpForm() {
                   {...register("returnBus")}
                 >
                   <option value="no">No</option>
-                  <option value="01:00">01:00</option>
-                  <option value="03:00">03:00</option>
-                  <option value="otro">Otro</option>
+                  {wedding.busRoutes
+                    .filter((route) => route.direction === "vuelta")
+                    .map((route) => (
+                      <option key={route.name} value={route.name}>
+                        {route.name} · {route.departureTime}h
+                      </option>
+                    ))}
                 </select>
               </div>
 
