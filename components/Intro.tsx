@@ -20,7 +20,7 @@ export function Intro() {
           Qué bonito poder compartir este día con vosotros.
         </p>
         <p className="mt-6 font-display text-xl italic text-stone">
-          {wedding.couple.groom} &amp; {wedding.couple.bride}
+          {wedding.couple.bride} &amp; {wedding.couple.groom}
         </p>
       </FadeUp>
     </section>

@@ -14,20 +14,20 @@ export function Contacto() {
           </h2>
           <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <a
-              href={`https://wa.me/${wedding.whatsapp.javier}`}
-              target="_blank"
-              rel="noreferrer"
-              className="w-full border border-olive px-6 py-3 font-sans text-xs uppercase tracking-[0.2em] text-olive transition-colors hover:bg-olive hover:text-warm-white sm:w-auto"
-            >
-              WhatsApp Javier
-            </a>
-            <a
               href={`https://wa.me/${wedding.whatsapp.carol}`}
               target="_blank"
               rel="noreferrer"
               className="w-full border border-olive px-6 py-3 font-sans text-xs uppercase tracking-[0.2em] text-olive transition-colors hover:bg-olive hover:text-warm-white sm:w-auto"
             >
               WhatsApp {wedding.couple.bride}
+            </a>
+            <a
+              href={`https://wa.me/${wedding.whatsapp.javier}`}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full border border-olive px-6 py-3 font-sans text-xs uppercase tracking-[0.2em] text-olive transition-colors hover:bg-olive hover:text-warm-white sm:w-auto"
+            >
+              WhatsApp Javier
             </a>
           </div>
         </FadeUp>

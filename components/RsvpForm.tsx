@@ -17,11 +17,18 @@ const labelClasses =
 
 export function RsvpForm() {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [needsOutboundBus, setNeedsOutboundBus] = useState<"si" | "no" | null>(
+    null
+  );
+  const [needsReturnBus, setNeedsReturnBus] = useState<"si" | "no" | null>(
+    null
+  );
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<RsvpFormValues>({
     resolver: zodResolver(rsvpSchema),
@@ -231,49 +238,104 @@ export function RsvpForm() {
               )}
 
               <fieldset>
-                <legend className={labelClasses}>Autobús de ida</legend>
-                <p className="mt-2 font-sans text-xs text-stone">
-                  Marca las etapas que necesites. Si sales desde Valencia,
-                  marca ambas.
-                </p>
-                <div className="mt-3 flex flex-col gap-3">
-                  {wedding.busRoutes
-                    .filter((route) => route.direction === "ida")
-                    .map((route) => (
-                      <label
-                        key={route.id}
-                        className="flex items-center gap-3 font-sans text-sm text-ink"
-                      >
-                        <input
-                          type="checkbox"
-                          value={route.id}
-                          {...register("busRoutes")}
-                        />
-                        {route.name} · {route.departureTime}h
-                      </label>
-                    ))}
+                <legend className={labelClasses}>
+                  ¿Necesitas autobús de ida?
+                </legend>
+                <div className="mt-3 flex gap-6">
+                  <label className="flex items-center gap-2 font-sans text-sm text-ink">
+                    <input
+                      type="radio"
+                      checked={needsOutboundBus === "si"}
+                      onChange={() => setNeedsOutboundBus("si")}
+                    />
+                    Sí
+                  </label>
+                  <label className="flex items-center gap-2 font-sans text-sm text-ink">
+                    <input
+                      type="radio"
+                      checked={needsOutboundBus === "no"}
+                      onChange={() => {
+                        setNeedsOutboundBus("no");
+                        setValue("busRoutes", []);
+                      }}
+                    />
+                    No
+                  </label>
                 </div>
+
+                {needsOutboundBus === "si" && (
+                  <>
+                    <p className="mt-4 font-sans text-xs text-stone">
+                      Marca las etapas que necesites. Si sales desde Valencia,
+                      marca ambas.
+                    </p>
+                    <div className="mt-3 flex flex-col gap-3">
+                      {wedding.busRoutes
+                        .filter((route) => route.direction === "ida")
+                        .map((route) => (
+                          <label
+                            key={route.id}
+                            className="flex items-center gap-3 font-sans text-sm text-ink"
+                          >
+                            <input
+                              type="checkbox"
+                              value={route.id}
+                              {...register("busRoutes")}
+                            />
+                            {route.name} · {route.departureTime}h
+                          </label>
+                        ))}
+                    </div>
+                  </>
+                )}
               </fieldset>
 
-              <div>
-                <label className={labelClasses} htmlFor="returnBus">
-                  Autobús de vuelta
-                </label>
-                <select
-                  id="returnBus"
-                  className={inputClasses}
-                  {...register("returnBus")}
-                >
-                  <option value="no">No</option>
-                  {wedding.busRoutes
-                    .filter((route) => route.direction === "vuelta")
-                    .map((route) => (
-                      <option key={route.id} value={route.id}>
-                        {route.name} · {route.departureTime}h
-                      </option>
-                    ))}
-                </select>
-              </div>
+              <fieldset>
+                <legend className={labelClasses}>
+                  ¿Necesitas autobús de vuelta?
+                </legend>
+                <div className="mt-3 flex gap-6">
+                  <label className="flex items-center gap-2 font-sans text-sm text-ink">
+                    <input
+                      type="radio"
+                      checked={needsReturnBus === "si"}
+                      onChange={() => setNeedsReturnBus("si")}
+                    />
+                    Sí
+                  </label>
+                  <label className="flex items-center gap-2 font-sans text-sm text-ink">
+                    <input
+                      type="radio"
+                      checked={needsReturnBus === "no"}
+                      onChange={() => {
+                        setNeedsReturnBus("no");
+                        setValue("returnBus", "no");
+                      }}
+                    />
+                    No
+                  </label>
+                </div>
+
+                {needsReturnBus === "si" && (
+                  <div className="mt-4 flex flex-col gap-3">
+                    {wedding.busRoutes
+                      .filter((route) => route.direction === "vuelta")
+                      .map((route) => (
+                        <label
+                          key={route.id}
+                          className="flex items-center gap-3 font-sans text-sm text-ink"
+                        >
+                          <input
+                            type="radio"
+                            value={route.id}
+                            {...register("returnBus")}
+                          />
+                          {route.name} · {route.departureTime}h
+                        </label>
+                      ))}
+                  </div>
+                )}
+              </fieldset>
 
               <div>
                 <label className={labelClasses} htmlFor="dietaryRequirements">

@@ -7,7 +7,7 @@ const dateShort = wedding.weddingDate
   .split("-")
   .reverse()
   .join(".");
-const pageTitle = `${wedding.couple.groom} & ${wedding.couple.bride} | ${dateShort}`;
+const pageTitle = `${wedding.couple.bride} & ${wedding.couple.groom} | ${dateShort}`;
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",

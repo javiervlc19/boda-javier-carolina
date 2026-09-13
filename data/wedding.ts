@@ -40,7 +40,7 @@ export const wedding = {
   couple: {
     groom: "Javier",
     bride: "Carolina",
-    initials: "J | C",
+    initials: "C | J",
   },
   weddingDate: "2027-05-22",
   weddingDateLabel: "22 de mayo de 2027",
@@ -139,7 +139,7 @@ export const wedding = {
     {
       name: "Hotel Checkin Valencia Ciscar",
       location: "Valencia ciudad",
-      distance: "A 15 minutos de la celebración",
+      distance: "A 7 minutos de la celebración",
       price: "Desde 75€/noche",
       website: "https://www.booking.com/searchresults.html?ss=Hotel+Checkin+Valencia+Ciscar",
       mapsUrl: "https://maps.google.com/?q=Hotel+Checkin+Valencia+Ciscar",
@@ -147,7 +147,7 @@ export const wedding = {
     {
       name: "Valencia Living Suites",
       location: "Valencia ciudad",
-      distance: "A 15 minutos de la celebración",
+      distance: "A 5 minutos de la celebración",
       price: "Desde 70€/noche",
       website: "https://www.booking.com/searchresults.html?ss=Valencia+Living+Suites",
       mapsUrl: "https://maps.google.com/?q=Valencia+Living+Suites",
@@ -167,7 +167,7 @@ export const wedding = {
   },
   bankAccount: {
     iban: "ES45 0182 5319 7500 0095 5634",
-    holder: "Javier & Carolina",
+    holder: "Carolina & Javier",
   },
   dresscode: {
     title: "DRESS CODE",

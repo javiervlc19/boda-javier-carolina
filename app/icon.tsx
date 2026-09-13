@@ -20,7 +20,7 @@ export default function Icon() {
           letterSpacing: 1,
         }}
       >
-        J|C
+        C|J
       </div>
     ),
     size

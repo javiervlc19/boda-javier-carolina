@@ -9,7 +9,7 @@ export function Hero() {
     >
       <Image
         src="/images/hero.jpg"
-        alt={`${wedding.couple.groom} y ${wedding.couple.bride}`}
+        alt={`${wedding.couple.bride} y ${wedding.couple.groom}`}
         fill
         priority
         sizes="100vw"
@@ -22,13 +22,13 @@ export function Hero() {
           Nos casamos
         </p>
         <h1 className="mt-4 font-display text-5xl leading-none tracking-wide sm:text-6xl">
-          {wedding.couple.groom}
+          {wedding.couple.bride}
         </h1>
         <p className="my-2 font-display text-xl italic text-warm-white/80">
           y
         </p>
         <h1 className="font-display text-5xl leading-none tracking-wide sm:text-6xl">
-          {wedding.couple.bride}
+          {wedding.couple.groom}
         </h1>
         <p className="mt-6 font-sans text-xs uppercase tracking-[0.35em] text-warm-white/90">
           {wedding.weddingDateLabel} &middot; {wedding.city.toUpperCase()}
