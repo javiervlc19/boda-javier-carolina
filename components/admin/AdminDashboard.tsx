@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { WeddingGuestRow } from "@/lib/supabase";
 import { EditGuestModal } from "@/components/admin/EditGuestModal";
+import { exportGuestsToExcel } from "@/lib/exportGuests";
+import { wedding } from "@/data/wedding";
 
 function Kpi({ label, value }: { label: string; value: number | string }) {
   return (
@@ -16,51 +18,6 @@ function Kpi({ label, value }: { label: string; value: number | string }) {
   );
 }
 
-function toCsv(rows: WeddingGuestRow[]): string {
-  const headers = [
-    "Nombre",
-    "Asistencia",
-    "Nº asistentes",
-    "Acompañantes",
-    "Niños",
-    "Nº niños",
-    "Autobús",
-    "Autobús vuelta",
-    "Alimentación",
-    "Canción",
-    "Observaciones",
-    "Mensaje",
-    "Fecha",
-  ];
-
-  const escape = (value: unknown) => {
-    const s = value === null || value === undefined ? "" : String(value);
-    return `"${s.replace(/"/g, '""')}"`;
-  };
-
-  const lines = rows.map((row) =>
-    [
-      row.name,
-      row.attendance === "si" ? "Sí" : "No",
-      row.guest_count ?? "",
-      (row.companions ?? []).join("; "),
-      row.children ? "Sí" : "No",
-      row.children_count ?? "",
-      row.bus_route ?? "",
-      row.return_bus ?? "",
-      row.dietary_requirements ?? "",
-      row.song ?? "",
-      row.notes ?? "",
-      row.message ?? "",
-      new Date(row.created_at).toLocaleString("es-ES"),
-    ]
-      .map(escape)
-      .join(",")
-  );
-
-  return [headers.map(escape).join(","), ...lines].join("\n");
-}
-
 export function AdminDashboard({ guests }: { guests: WeddingGuestRow[] }) {
   const router = useRouter();
   const [search, setSearch] = useState("");
@@ -70,6 +27,7 @@ export function AdminDashboard({ guests }: { guests: WeddingGuestRow[] }) {
     null
   );
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
 
   const filtered = useMemo(() => {
     return guests.filter((g) => {
@@ -81,7 +39,9 @@ export function AdminDashboard({ guests }: { guests: WeddingGuestRow[] }) {
       }
       if (busFilter !== "todos") {
         if (busFilter === "ninguno" && g.bus_route) return false;
-        if (busFilter !== "ninguno" && g.bus_route !== busFilter) return false;
+        if (busFilter !== "ninguno" && !g.bus_route?.includes(busFilter)) {
+          return false;
+        }
       }
       return true;
     });
@@ -114,17 +74,13 @@ export function AdminDashboard({ guests }: { guests: WeddingGuestRow[] }) {
     };
   }, [guests]);
 
-  function exportCsv() {
-    const csv = toCsv(filtered);
-    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "confirmaciones-boda.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+  async function exportExcel() {
+    setExporting(true);
+    try {
+      await exportGuestsToExcel(filtered);
+    } finally {
+      setExporting(false);
+    }
   }
 
   async function logout() {
@@ -202,15 +158,20 @@ export function AdminDashboard({ guests }: { guests: WeddingGuestRow[] }) {
           >
             <option value="todos">Todos los autobuses</option>
             <option value="ninguno">Sin autobús</option>
-            <option value="Valencia">Valencia</option>
-            <option value="Castellón">Castellón</option>
-            <option value="Altura">Altura</option>
+            {wedding.busRoutes
+              .filter((r) => r.direction === "ida")
+              .map((r) => (
+                <option key={r.id} value={r.name}>
+                  {r.name}
+                </option>
+              ))}
           </select>
           <button
-            onClick={exportCsv}
-            className="ml-auto border border-olive bg-olive px-5 py-2.5 font-sans text-xs uppercase tracking-[0.2em] text-warm-white hover:opacity-90"
+            onClick={exportExcel}
+            disabled={exporting}
+            className="ml-auto border border-olive bg-olive px-5 py-2.5 font-sans text-xs uppercase tracking-[0.2em] text-warm-white hover:opacity-90 disabled:opacity-50"
           >
-            Exportar CSV
+            {exporting ? "Generando..." : "Exportar Excel"}
           </button>
         </div>
 
