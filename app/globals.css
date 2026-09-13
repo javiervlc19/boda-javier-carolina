@@ -28,14 +28,8 @@ body {
   font-family: var(--font-sans);
 }
 
-@media (max-width: 640px) {
-  html {
-    scroll-snap-type: y proximity;
-  }
-
-  main > section {
-    scroll-snap-align: start;
-  }
+section {
+  scroll-margin-top: 88px;
 }
 
 .font-display {

@@ -60,7 +60,7 @@ export function GranDia() {
           />
         </div>
 
-        <div id="como-llegar" className="mt-4 flex flex-col divide-y divide-stone/30 sm:mt-8 sm:flex-row sm:divide-x sm:divide-y-0">
+        <div className="mt-4 flex flex-col divide-y divide-stone/30 sm:mt-8 sm:flex-row sm:divide-x sm:divide-y-0">
           <EventCard
             eyebrow="Ceremonia"
             time={wedding.ceremony.time}

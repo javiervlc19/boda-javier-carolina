@@ -10,6 +10,7 @@ import { Regalos } from "@/components/Regalos";
 import { Contacto } from "@/components/Contacto";
 import { RsvpForm } from "@/components/RsvpForm";
 import { Footer } from "@/components/Footer";
+import { SectionReveal } from "@/components/SectionReveal";
 
 export default function Home() {
   return (
@@ -17,15 +18,33 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Intro />
-        <GranDia />
-        <Timeline />
-        <Autobuses />
-        <Alojamiento />
-        <DressCode />
-        <Regalos />
-        <Contacto />
-        <RsvpForm />
+        <SectionReveal>
+          <Intro />
+        </SectionReveal>
+        <SectionReveal>
+          <GranDia />
+        </SectionReveal>
+        <SectionReveal>
+          <Timeline />
+        </SectionReveal>
+        <SectionReveal>
+          <Autobuses />
+        </SectionReveal>
+        <SectionReveal>
+          <Alojamiento />
+        </SectionReveal>
+        <SectionReveal>
+          <DressCode />
+        </SectionReveal>
+        <SectionReveal>
+          <Regalos />
+        </SectionReveal>
+        <SectionReveal>
+          <Contacto />
+        </SectionReveal>
+        <SectionReveal>
+          <RsvpForm />
+        </SectionReveal>
       </main>
       <Footer />
     </>

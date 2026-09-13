@@ -6,7 +6,6 @@ import { wedding } from "@/data/wedding";
 const LINKS = [
   { href: "#inicio", label: "Inicio" },
   { href: "#el-gran-dia", label: "El gran día" },
-  { href: "#como-llegar", label: "Cómo llegar" },
   { href: "#autobuses", label: "Autobuses" },
   { href: "#alojamiento", label: "Alojamiento" },
   { href: "#informacion", label: "Información" },
