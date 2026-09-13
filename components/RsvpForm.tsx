@@ -17,9 +17,10 @@ const labelClasses =
 
 export function RsvpForm() {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
-  const [needsOutboundBus, setNeedsOutboundBus] = useState<"si" | "no" | null>(
-    null
-  );
+  const [needsBusIda, setNeedsBusIda] = useState<"si" | "no" | null>(null);
+  const [needsBusIglesiaBanquete, setNeedsBusIglesiaBanquete] = useState<
+    "si" | "no" | null
+  >(null);
   const [needsReturnBus, setNeedsReturnBus] = useState<"si" | "no" | null>(
     null
   );
@@ -50,6 +51,22 @@ export function RsvpForm() {
   const attendance = watch("attendance");
   const guestCount = Number(watch("guestCount") ?? 1);
   const childrenAnswer = watch("children");
+  const busRoutesValue = watch("busRoutes") ?? [];
+
+  const busIdaRoute = wedding.busRoutes.find((r) => r.id === "valencia-alzira");
+  const busIglesiaBanqueteRoute = wedding.busRoutes.find(
+    (r) => r.id === "alzira-picanya"
+  );
+
+  function setBusRouteSelected(routeId: string, selected: boolean) {
+    const current = new Set(busRoutesValue);
+    if (selected) {
+      current.add(routeId);
+    } else {
+      current.delete(routeId);
+    }
+    setValue("busRoutes", Array.from(current));
+  }
 
   async function onSubmit(values: RsvpFormValues) {
     setStatus("idle");
@@ -237,58 +254,83 @@ export function RsvpForm() {
                 </div>
               )}
 
-              <fieldset>
-                <legend className={labelClasses}>
-                  ¿Necesitas autobús de ida?
-                </legend>
-                <div className="mt-3 flex gap-6">
-                  <label className="flex items-center gap-2 font-sans text-sm text-ink">
-                    <input
-                      type="radio"
-                      checked={needsOutboundBus === "si"}
-                      onChange={() => setNeedsOutboundBus("si")}
-                    />
-                    Sí
-                  </label>
-                  <label className="flex items-center gap-2 font-sans text-sm text-ink">
-                    <input
-                      type="radio"
-                      checked={needsOutboundBus === "no"}
-                      onChange={() => {
-                        setNeedsOutboundBus("no");
-                        setValue("busRoutes", []);
-                      }}
-                    />
-                    No
-                  </label>
-                </div>
-
-                {needsOutboundBus === "si" && (
-                  <>
-                    <p className="mt-4 font-sans text-xs text-stone">
-                      Marca las etapas que necesites. Si sales desde Valencia,
-                      marca ambas.
+              {busIdaRoute && (
+                <fieldset>
+                  <legend className={labelClasses}>
+                    ¿Necesitas el bus de ida ({busIdaRoute.name})?
+                  </legend>
+                  <div className="mt-3 flex gap-6">
+                    <label className="flex items-center gap-2 font-sans text-sm text-ink">
+                      <input
+                        type="radio"
+                        checked={needsBusIda === "si"}
+                        onChange={() => {
+                          setNeedsBusIda("si");
+                          setBusRouteSelected(busIdaRoute.id, true);
+                        }}
+                      />
+                      Sí
+                    </label>
+                    <label className="flex items-center gap-2 font-sans text-sm text-ink">
+                      <input
+                        type="radio"
+                        checked={needsBusIda === "no"}
+                        onChange={() => {
+                          setNeedsBusIda("no");
+                          setBusRouteSelected(busIdaRoute.id, false);
+                        }}
+                      />
+                      No
+                    </label>
+                  </div>
+                  {needsBusIda === "si" && (
+                    <p className="mt-2 font-sans text-xs text-stone">
+                      Salida {busIdaRoute.departureTime}h
                     </p>
-                    <div className="mt-3 flex flex-col gap-3">
-                      {wedding.busRoutes
-                        .filter((route) => route.direction === "ida")
-                        .map((route) => (
-                          <label
-                            key={route.id}
-                            className="flex items-center gap-3 font-sans text-sm text-ink"
-                          >
-                            <input
-                              type="checkbox"
-                              value={route.id}
-                              {...register("busRoutes")}
-                            />
-                            {route.name} · {route.departureTime}h
-                          </label>
-                        ))}
-                    </div>
-                  </>
-                )}
-              </fieldset>
+                  )}
+                </fieldset>
+              )}
+
+              {busIglesiaBanqueteRoute && (
+                <fieldset>
+                  <legend className={labelClasses}>
+                    ¿Necesitas el bus iglesia-banquete (
+                    {busIglesiaBanqueteRoute.name})?
+                  </legend>
+                  <div className="mt-3 flex gap-6">
+                    <label className="flex items-center gap-2 font-sans text-sm text-ink">
+                      <input
+                        type="radio"
+                        checked={needsBusIglesiaBanquete === "si"}
+                        onChange={() => {
+                          setNeedsBusIglesiaBanquete("si");
+                          setBusRouteSelected(busIglesiaBanqueteRoute.id, true);
+                        }}
+                      />
+                      Sí
+                    </label>
+                    <label className="flex items-center gap-2 font-sans text-sm text-ink">
+                      <input
+                        type="radio"
+                        checked={needsBusIglesiaBanquete === "no"}
+                        onChange={() => {
+                          setNeedsBusIglesiaBanquete("no");
+                          setBusRouteSelected(
+                            busIglesiaBanqueteRoute.id,
+                            false
+                          );
+                        }}
+                      />
+                      No
+                    </label>
+                  </div>
+                  {needsBusIglesiaBanquete === "si" && (
+                    <p className="mt-2 font-sans text-xs text-stone">
+                      Salida {busIglesiaBanqueteRoute.departureTime}h
+                    </p>
+                  )}
+                </fieldset>
+              )}
 
               <fieldset>
                 <legend className={labelClasses}>

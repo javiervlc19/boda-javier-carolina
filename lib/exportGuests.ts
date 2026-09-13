@@ -1,7 +1,14 @@
 import type { WeddingGuestRow } from "@/lib/supabase";
 import { wedding } from "@/data/wedding";
 
-const IDA_ROUTES = wedding.busRoutes.filter((r) => r.direction === "ida");
+const IDA_ROUTE_LABELS: Record<string, string> = {
+  "valencia-alzira": "Bus de ida",
+  "alzira-picanya": "Bus iglesia-banquete",
+};
+
+const IDA_ROUTES = wedding.busRoutes
+  .filter((r) => r.direction === "ida")
+  .map((r) => ({ ...r, exportLabel: IDA_ROUTE_LABELS[r.id] ?? r.name }));
 
 function busLegValue(busRoute: string | null, routeName: string): string {
   if (!busRoute) return "No";
@@ -28,7 +35,9 @@ export type ExportRow = {
 };
 
 export function buildExportRows(rows: WeddingGuestRow[]) {
-  const idaHeaders = IDA_ROUTES.map((r) => `Bus ida: ${r.name}`);
+  const idaHeaders = IDA_ROUTES.map(
+    (r) => `${r.exportLabel} (${r.name})`
+  );
 
   const data = rows.map((g) => {
     const base: Record<string, string | number> = {
@@ -41,7 +50,10 @@ export function buildExportRows(rows: WeddingGuestRow[]) {
     };
 
     for (const route of IDA_ROUTES) {
-      base[`Bus ida: ${route.name}`] = busLegValue(g.bus_route, route.name);
+      base[`${route.exportLabel} (${route.name})`] = busLegValue(
+        g.bus_route,
+        route.name
+      );
     }
 
     base["Bus de vuelta"] = returnBusValue(g.return_bus);
