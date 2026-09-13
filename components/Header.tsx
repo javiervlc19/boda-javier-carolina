@@ -8,7 +8,7 @@ const LINKS = [
   { href: "#el-gran-dia", label: "El gran día" },
   { href: "#autobuses", label: "Autobuses" },
   { href: "#alojamiento", label: "Alojamiento" },
-  { href: "#informacion", label: "Información" },
+  { href: "#informacion", label: "Más información" },
   { href: "#rsvp", label: "Confirmar asistencia" },
 ];
 

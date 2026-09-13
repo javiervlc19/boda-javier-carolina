@@ -4,7 +4,7 @@ import { timelineIconFor } from "@/components/TimelineIcons";
 
 export function Timeline() {
   return (
-    <section className="bg-warm-white py-24 sm:py-32">
+    <section className="bg-cream py-24 sm:py-32">
       <div className="mx-auto max-w-5xl px-6">
         <FadeUp className="text-center">
           <p className="font-sans text-xs uppercase tracking-[0.3em] text-stone">

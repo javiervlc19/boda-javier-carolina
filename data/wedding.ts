@@ -169,8 +169,4 @@ export const wedding = {
     iban: "ES45 0182 5319 7500 0095 5634",
     holder: "Carolina & Javier",
   },
-  dresscode: {
-    title: "DRESS CODE",
-    level: "Elegante",
-  },
 };

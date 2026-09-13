@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import { wedding } from "@/data/wedding";
 import "./globals.css";
@@ -41,6 +41,11 @@ export const metadata: Metadata = {
       "Nos casamos. Aquí encontrarás toda la información sobre nuestra boda.",
     images: ["/images/og-image.jpg"],
   },
+};
+
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#f4f1ea",
 };
 
 export default function RootLayout({

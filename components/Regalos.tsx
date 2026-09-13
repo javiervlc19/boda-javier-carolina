@@ -5,7 +5,6 @@ import { FadeUp } from "@/components/FadeUp";
 import { wedding } from "@/data/wedding";
 
 export function Regalos() {
-  const [revealed, setRevealed] = useState(false);
   const [toastVisible, setToastVisible] = useState(false);
 
   async function copyIban() {
@@ -19,7 +18,7 @@ export function Regalos() {
   }
 
   return (
-    <section className="bg-warm-white py-24 text-center sm:py-32">
+    <section id="informacion" className="bg-warm-white py-24 text-center sm:py-32">
       <div className="mx-auto max-w-xl px-6">
         <FadeUp>
           <p className="font-sans text-xs uppercase tracking-[0.3em] text-stone">
@@ -29,33 +28,24 @@ export function Regalos() {
             El mejor regalo es que vengas
           </h2>
 
-          {!revealed ? (
+          <div className="mt-8 flex flex-col items-center gap-4">
+            <p className="font-sans text-sm text-stone">
+              Si aun así quieres tener un detalle con nosotros, puedes
+              hacerlo a través de este número de cuenta:
+            </p>
+            <p className="font-display text-xl tracking-wider text-ink">
+              {wedding.bankAccount.iban}
+            </p>
+            <p className="font-sans text-xs uppercase tracking-[0.2em] text-stone">
+              {wedding.bankAccount.holder}
+            </p>
             <button
-              onClick={() => setRevealed(true)}
-              className="mt-8 border border-olive px-8 py-3 font-sans text-xs uppercase tracking-[0.25em] text-olive transition-colors hover:bg-olive hover:text-warm-white"
+              onClick={copyIban}
+              className="mt-2 border border-olive px-6 py-2.5 font-sans text-xs uppercase tracking-[0.2em] text-olive transition-colors hover:bg-olive hover:text-warm-white"
             >
-              Ver información
+              Copiar IBAN
             </button>
-          ) : (
-            <div className="mt-8 flex flex-col items-center gap-4">
-              <p className="font-sans text-sm text-stone">
-                Si aun así quieres tener un detalle con nosotros, puedes
-                hacerlo a través de este número de cuenta:
-              </p>
-              <p className="font-display text-xl tracking-wider text-ink">
-                {wedding.bankAccount.iban}
-              </p>
-              <p className="font-sans text-xs uppercase tracking-[0.2em] text-stone">
-                {wedding.bankAccount.holder}
-              </p>
-              <button
-                onClick={copyIban}
-                className="mt-2 border border-olive px-6 py-2.5 font-sans text-xs uppercase tracking-[0.2em] text-olive transition-colors hover:bg-olive hover:text-warm-white"
-              >
-                Copiar IBAN
-              </button>
-            </div>
-          )}
+          </div>
         </FadeUp>
       </div>
 

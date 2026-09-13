@@ -76,7 +76,7 @@ export function Autobuses() {
   );
 
   return (
-    <section id="autobuses" className="py-24 sm:py-32">
+    <section id="autobuses" className="bg-warm-white py-24 sm:py-32">
       <div className="mx-auto max-w-2xl px-6">
         <FadeUp className="text-center">
           <p className="font-sans text-xs uppercase tracking-[0.3em] text-stone">

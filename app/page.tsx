@@ -5,7 +5,6 @@ import { GranDia } from "@/components/GranDia";
 import { Timeline } from "@/components/Timeline";
 import { Autobuses } from "@/components/Autobuses";
 import { Alojamiento } from "@/components/Alojamiento";
-import { DressCode } from "@/components/DressCode";
 import { Regalos } from "@/components/Regalos";
 import { Contacto } from "@/components/Contacto";
 import { RsvpForm } from "@/components/RsvpForm";
@@ -32,9 +31,6 @@ export default function Home() {
         </SectionReveal>
         <SectionReveal>
           <Alojamiento />
-        </SectionReveal>
-        <SectionReveal>
-          <DressCode />
         </SectionReveal>
         <SectionReveal>
           <Regalos />

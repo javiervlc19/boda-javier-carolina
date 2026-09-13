@@ -3,7 +3,7 @@ import { wedding } from "@/data/wedding";
 
 export function Contacto() {
   return (
-    <section className="py-24 text-center sm:py-32">
+    <section className="bg-cream py-24 text-center sm:py-32">
       <div className="mx-auto max-w-xl px-6">
         <FadeUp>
           <p className="font-sans text-xs uppercase tracking-[0.3em] text-stone">
