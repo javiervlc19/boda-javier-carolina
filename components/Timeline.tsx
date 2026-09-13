@@ -15,33 +15,31 @@ export function Timeline() {
           </h2>
         </FadeUp>
 
-        <div className="mt-16 overflow-x-auto sm:mt-20 sm:overflow-visible">
-          <div className="flex min-w-[560px] items-start justify-between gap-2 px-2 sm:min-w-0 sm:px-0">
-            {wedding.timeline.map((item, index) => {
-              const Icon = timelineIconFor(item.icon);
-              return (
-                <FadeUp
-                  key={item.time}
-                  delay={index * 90}
-                  className="flex flex-1 flex-col items-center text-center"
-                >
-                  <Icon className="h-10 w-10 text-olive sm:h-12 sm:w-12" />
+        <div className="mt-16 grid grid-cols-4 gap-1 sm:mt-20 sm:gap-2">
+          {wedding.timeline.map((item, index) => {
+            const Icon = timelineIconFor(item.icon);
+            return (
+              <FadeUp
+                key={item.time}
+                delay={index * 90}
+                className="flex flex-col items-center text-center"
+              >
+                <Icon className="h-7 w-7 text-olive sm:h-10 sm:w-10 md:h-12 md:w-12" />
 
-                  <div className="relative mt-6 w-full">
-                    <div className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-stone/40" />
-                    <span className="relative mx-auto block h-2 w-2 rounded-full bg-olive" />
-                  </div>
+                <div className="relative mt-3 w-full sm:mt-6">
+                  <div className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-stone/40" />
+                  <span className="relative mx-auto block h-2 w-2 rounded-full bg-olive" />
+                </div>
 
-                  <p className="mt-5 font-display text-lg text-ink sm:text-xl">
-                    {item.time}
-                  </p>
-                  <p className="mt-1 font-sans text-[11px] uppercase tracking-[0.25em] text-stone sm:text-xs">
-                    {item.title}
-                  </p>
-                </FadeUp>
-              );
-            })}
-          </div>
+                <p className="mt-3 font-display text-sm text-ink sm:mt-5 sm:text-lg md:text-xl">
+                  {item.time}
+                </p>
+                <p className="mt-1 font-sans text-[9px] uppercase leading-tight tracking-[0.15em] text-stone sm:text-[11px] sm:tracking-[0.25em] md:text-xs">
+                  {item.title}
+                </p>
+              </FadeUp>
+            );
+          })}
         </div>
       </div>
     </section>

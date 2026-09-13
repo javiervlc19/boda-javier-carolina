@@ -39,7 +39,7 @@ function EventCard({
 
 export function GranDia() {
   return (
-    <section id="el-gran-dia" className="relative py-24 sm:py-32">
+    <section id="el-gran-dia" className="relative pt-12 pb-24 sm:pt-16 sm:pb-32">
       <div className="mx-auto max-w-5xl px-6">
         <FadeUp className="text-center">
           <p className="font-sans text-xs uppercase tracking-[0.3em] text-stone">

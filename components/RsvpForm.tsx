@@ -64,9 +64,24 @@ export function RsvpForm() {
         isAttending && values.children === "si" ? Number(values.childrenCount) : null,
       bus_route:
         isAttending && values.busRoutes && values.busRoutes.length > 0
-          ? values.busRoutes.join(" + ")
+          ? values.busRoutes
+              .map((id) => {
+                const route = wedding.busRoutes.find((r) => r.id === id);
+                return route ? `${route.name} · ${route.departureTime}h` : id;
+              })
+              .join(" + ")
           : null,
-      return_bus: isAttending ? values.returnBus : null,
+      return_bus:
+        isAttending && values.returnBus && values.returnBus !== "no"
+          ? (() => {
+              const route = wedding.busRoutes.find(
+                (r) => r.id === values.returnBus
+              );
+              return route ? `${route.name} · ${route.departureTime}h` : values.returnBus;
+            })()
+          : isAttending
+            ? "no"
+            : null,
       dietary_requirements: isAttending ? values.dietaryRequirements || null : null,
       song: isAttending ? values.song || null : null,
       notes: isAttending ? values.notes || null : null,
@@ -90,8 +105,7 @@ export function RsvpForm() {
           </p>
           <p className="mt-6 font-sans text-sm text-stone">
             Tu confirmación se ha enviado correctamente. Nos vemos el{" "}
-            {wedding.weddingDateHuman}. ♡ {wedding.couple.groom} &amp;{" "}
-            {wedding.couple.bride}
+            {wedding.weddingDateHuman}.
           </p>
         </FadeUp>
       </section>
@@ -227,12 +241,12 @@ export function RsvpForm() {
                     .filter((route) => route.direction === "ida")
                     .map((route) => (
                       <label
-                        key={route.name}
+                        key={route.id}
                         className="flex items-center gap-3 font-sans text-sm text-ink"
                       >
                         <input
                           type="checkbox"
-                          value={route.name}
+                          value={route.id}
                           {...register("busRoutes")}
                         />
                         {route.name} · {route.departureTime}h
@@ -254,7 +268,7 @@ export function RsvpForm() {
                   {wedding.busRoutes
                     .filter((route) => route.direction === "vuelta")
                     .map((route) => (
-                      <option key={route.name} value={route.name}>
+                      <option key={route.id} value={route.id}>
                         {route.name} · {route.departureTime}h
                       </option>
                     ))}

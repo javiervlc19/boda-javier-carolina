@@ -12,9 +12,6 @@ export function DressCode() {
           <p className="mt-6 font-display text-4xl text-ink sm:text-5xl">
             {wedding.dresscode.level}
           </p>
-          <p className="mt-6 font-sans text-sm text-stone">
-            {wedding.dresscode.note}
-          </p>
         </FadeUp>
       </div>
     </section>

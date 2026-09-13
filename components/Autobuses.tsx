@@ -22,9 +22,58 @@ function RouteCard({ route, delay }: { route: BusRoute; delay: number }) {
   );
 }
 
+function GroupedRouteCard({
+  routes,
+  delay,
+}: {
+  routes: BusRoute[];
+  delay: number;
+}) {
+  const [first] = routes;
+  const sorted = [...routes].sort((a, b) =>
+    a.departureTime > b.departureTime ? -1 : 1
+  );
+
+  return (
+    <FadeUp delay={delay} className="border-t border-stone/30 pt-8 text-center">
+      <p className="font-display text-3xl text-ink">{first.name}</p>
+      <div className="mt-2 flex flex-col gap-1">
+        {sorted.map((route) => (
+          <p
+            key={route.id}
+            className="font-sans text-xs uppercase tracking-[0.25em] text-stone"
+          >
+            Salida {route.departureTime}h
+          </p>
+        ))}
+      </div>
+      <p className="mt-3 font-sans text-sm text-ink">
+        {first.stops.join(" · ")}
+      </p>
+      <a
+        href={first.mapsUrl}
+        target="_blank"
+        rel="noreferrer"
+        className="mt-6 inline-block border border-olive px-6 py-3 font-sans text-xs uppercase tracking-[0.25em] text-olive transition-colors hover:bg-olive hover:text-warm-white"
+      >
+        Ver ruta
+      </a>
+    </FadeUp>
+  );
+}
+
 export function Autobuses() {
   const outbound = wedding.busRoutes.filter((r) => r.direction === "ida");
   const returning = wedding.busRoutes.filter((r) => r.direction === "vuelta");
+
+  const returningGroups = returning.reduce<Record<string, BusRoute[]>>(
+    (acc, route) => {
+      const key = `${route.origin}-${route.destination}`;
+      acc[key] = acc[key] ? [...acc[key], route] : [route];
+      return acc;
+    },
+    {}
+  );
 
   return (
     <section id="autobuses" className="py-24 sm:py-32">
@@ -48,7 +97,7 @@ export function Autobuses() {
           </p>
           <div className="mt-8 flex flex-col gap-12">
             {outbound.map((route, index) => (
-              <RouteCard key={route.name} route={route} delay={index * 100} />
+              <RouteCard key={route.id} route={route} delay={index * 100} />
             ))}
           </div>
         </div>
@@ -58,8 +107,12 @@ export function Autobuses() {
             Vuelta
           </p>
           <div className="mt-8 flex flex-col gap-12">
-            {returning.map((route, index) => (
-              <RouteCard key={route.name} route={route} delay={index * 100} />
+            {Object.values(returningGroups).map((routes, index) => (
+              <GroupedRouteCard
+                key={`${routes[0].origin}-${routes[0].destination}`}
+                routes={routes}
+                delay={index * 100}
+              />
             ))}
           </div>
         </div>

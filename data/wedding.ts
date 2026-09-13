@@ -9,14 +9,23 @@ export type TimelineItem = {
 export type BusDirection = "ida" | "vuelta";
 
 export type BusRoute = {
+  id: string;
   name: string;
   direction: BusDirection;
   departureTime: string;
   origin: string;
   destination: string;
+  originAddress: string;
+  destinationAddress: string;
   stops: string[];
   mapsUrl: string;
 };
+
+function directionsUrl(originAddress: string, destinationAddress: string) {
+  return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(
+    originAddress
+  )}&destination=${encodeURIComponent(destinationAddress)}&travelmode=driving`;
+}
 
 export type Hotel = {
   name: string;
@@ -44,78 +53,112 @@ export const wedding = {
     mapsUrl: "https://maps.google.com/?q=Iglesia+de+Santa+Catalina+Alzira",
   },
   celebration: {
-    time: "12:30h",
+    time: "13:00h",
     name: "Huerto de San Vicente",
     address: "Picanya (Valencia)",
     mapsUrl: "https://maps.google.com/?q=Huerto+de+San+Vicente+Picanya",
   },
   timeline: [
     { time: "11:00h", title: "Ceremonia", icon: "rings" },
-    { time: "12:30h", title: "Aperitivo", icon: "aperitif" },
-    { time: "13:30h", title: "Comida", icon: "meal" },
-    { time: "16:00h", title: "Baile", icon: "party" },
+    { time: "13:00h", title: "Aperitivo", icon: "aperitif" },
+    { time: "15:00h", title: "Comida", icon: "meal" },
+    { time: "17:00h", title: "Baile", icon: "party" },
   ] as TimelineItem[],
   busRoutes: [
     {
+      id: "valencia-alzira",
       name: "Valencia → Alzira",
       direction: "ida",
-      departureTime: "09:45",
+      departureTime: "10:15",
       origin: "Valencia",
       destination: "Alzira",
-      stops: ["Estación del Norte"],
-      mapsUrl: "https://maps.google.com/?q=Estacion+del+Norte+Valencia",
+      originAddress: "Avenida de Aragón, Valencia",
+      destinationAddress: "Iglesia de Santa Catalina, Alzira",
+      stops: ["Avenida Aragón"],
     },
     {
+      id: "alzira-picanya",
       name: "Alzira → Picanya",
       direction: "ida",
-      departureTime: "12:00",
+      departureTime: "12:30",
       origin: "Alzira",
       destination: "Picanya",
+      originAddress: "Iglesia de Santa Catalina, Alzira",
+      destinationAddress: "Huerto de San Vicente, Picanya",
       stops: ["Iglesia de Santa Catalina"],
-      mapsUrl: "https://maps.google.com/?q=Iglesia+de+Santa+Catalina+Alzira",
     },
     {
+      id: "picanya-valencia-0100",
       name: "Picanya → Valencia",
       direction: "vuelta",
       departureTime: "01:00",
       origin: "Picanya",
       destination: "Valencia",
-      stops: ["Huerto de San Vicente"],
-      mapsUrl: "https://maps.google.com/?q=Huerto+de+San+Vicente+Picanya",
+      originAddress: "Huerto de San Vicente, Picanya",
+      destinationAddress: "Avenida de Aragón, Valencia",
+      stops: ["Huerto San Vicente - Avenida Aragón"],
     },
     {
+      id: "picanya-valencia-2200",
+      name: "Picanya → Valencia",
+      direction: "vuelta",
+      departureTime: "22:00",
+      origin: "Picanya",
+      destination: "Valencia",
+      originAddress: "Huerto de San Vicente, Picanya",
+      destinationAddress: "Avenida de Aragón, Valencia",
+      stops: ["Huerto San Vicente - Avenida Aragón"],
+    },
+    {
+      id: "picanya-alzira-0100",
       name: "Picanya → Alzira",
       direction: "vuelta",
       departureTime: "01:00",
       origin: "Picanya",
       destination: "Alzira",
-      stops: ["Huerto de San Vicente"],
-      mapsUrl: "https://maps.google.com/?q=Huerto+de+San+Vicente+Picanya",
+      originAddress: "Huerto de San Vicente, Picanya",
+      destinationAddress: "Iglesia de Santa Catalina, Alzira",
+      stops: ["Huerto San Vicente - Iglesia Santa Catalina"],
     },
-  ] as BusRoute[],
+    {
+      id: "picanya-alzira-2200",
+      name: "Picanya → Alzira",
+      direction: "vuelta",
+      departureTime: "22:00",
+      origin: "Picanya",
+      destination: "Alzira",
+      originAddress: "Huerto de San Vicente, Picanya",
+      destinationAddress: "Iglesia de Santa Catalina, Alzira",
+      stops: ["Huerto San Vicente - Iglesia Santa Catalina"],
+    },
+  ].map((route) => ({
+    ...route,
+    mapsUrl: directionsUrl(route.originAddress, route.destinationAddress),
+  })) as BusRoute[],
   hotels: [
     {
-      name: "SB Valencia Hotel",
-      location: "Xirivella, Valencia",
-      distance: "A 5 minutos de la celebración",
-      price: "Desde 80€/noche",
-      website: "https://www.booking.com",
-      mapsUrl: "https://maps.google.com/?q=SB+Valencia+Hotel+Xirivella",
+      name: "Hotel Checkin Valencia Ciscar",
+      location: "Valencia ciudad",
+      distance: "A 15 minutos de la celebración",
+      price: "Desde 75€/noche",
+      website: "https://www.booking.com/searchresults.html?ss=Hotel+Checkin+Valencia+Ciscar",
+      mapsUrl: "https://maps.google.com/?q=Hotel+Checkin+Valencia+Ciscar",
+    },
+    {
+      name: "Valencia Living Suites",
+      location: "Valencia ciudad",
+      distance: "A 15 minutos de la celebración",
+      price: "Desde 70€/noche",
+      website: "https://www.booking.com/searchresults.html?ss=Valencia+Living+Suites",
+      mapsUrl: "https://maps.google.com/?q=Valencia+Living+Suites",
     },
     {
       name: "Hotel Sorolla Palace",
       location: "Valencia ciudad",
-      distance: "A 15 minutos de la celebración",
-      price: "Desde 90€/noche",
-      website: "https://www.booking.com",
-      mapsUrl: "https://maps.google.com/?q=Hotel+Sorolla+Palace+Valencia",
-    },
-    {
-      name: "Hotel Husa Alameda Palace",
-      location: "Valencia centro",
       distance: "A 20 minutos de la celebración",
-      website: "https://www.booking.com",
-      mapsUrl: "https://maps.google.com/?q=Hotel+Husa+Alameda+Palace+Valencia",
+      price: "Desde 90€/noche",
+      website: "https://www.hotelsorollapalace.com",
+      mapsUrl: "https://maps.google.com/?q=Hotel+Sorolla+Palace+Valencia",
     },
   ] as Hotel[],
   whatsapp: {
@@ -129,6 +172,5 @@ export const wedding = {
   dresscode: {
     title: "DRESS CODE",
     level: "Elegante",
-    note: "Pero sobre todo, ven con ganas de pasarlo bien.",
   },
 };

@@ -3,13 +3,13 @@ import { wedding } from "@/data/wedding";
 
 const idaRouteValues = wedding.busRoutes
   .filter((route) => route.direction === "ida")
-  .map((route) => route.name) as [string, ...string[]];
+  .map((route) => route.id) as [string, ...string[]];
 
 const returnBusValues = [
   "no",
   ...wedding.busRoutes
     .filter((route) => route.direction === "vuelta")
-    .map((route) => route.name),
+    .map((route) => route.id),
 ] as [string, ...string[]];
 
 export const rsvpSchema = z
