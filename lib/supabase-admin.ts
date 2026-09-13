@@ -31,3 +31,35 @@ export async function fetchAllGuests(): Promise<WeddingGuestRow[]> {
 
   return (data ?? []) as WeddingGuestRow[];
 }
+
+export type WeddingGuestUpdate = Partial<
+  Omit<WeddingGuestRow, "id" | "created_at">
+>;
+
+export async function updateGuest(
+  id: string,
+  patch: WeddingGuestUpdate
+): Promise<WeddingGuestRow> {
+  const client = getSupabaseAdminClient();
+  const { data, error } = await client
+    .from("wedding_guests")
+    .update(patch)
+    .eq("id", id)
+    .select("*")
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data as WeddingGuestRow;
+}
+
+export async function deleteGuest(id: string): Promise<void> {
+  const client = getSupabaseAdminClient();
+  const { error } = await client.from("wedding_guests").delete().eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+}

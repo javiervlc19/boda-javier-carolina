@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { WeddingGuestRow } from "@/lib/supabase";
+import { EditGuestModal } from "@/components/admin/EditGuestModal";
 
 function Kpi({ label, value }: { label: string; value: number | string }) {
   return (
@@ -65,6 +66,10 @@ export function AdminDashboard({ guests }: { guests: WeddingGuestRow[] }) {
   const [search, setSearch] = useState("");
   const [attendanceFilter, setAttendanceFilter] = useState("todos");
   const [busFilter, setBusFilter] = useState("todos");
+  const [editingGuest, setEditingGuest] = useState<WeddingGuestRow | null>(
+    null
+  );
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     return guests.filter((g) => {
@@ -125,6 +130,28 @@ export function AdminDashboard({ guests }: { guests: WeddingGuestRow[] }) {
   async function logout() {
     await fetch("/api/admin/logout", { method: "POST" });
     router.refresh();
+  }
+
+  async function handleDelete(guest: WeddingGuestRow) {
+    const confirmed = window.confirm(
+      `¿Seguro que quieres eliminar la confirmación de "${guest.name}"? Esta acción no se puede deshacer.`
+    );
+    if (!confirmed) return;
+
+    setDeletingId(guest.id);
+    try {
+      const res = await fetch(`/api/admin/guests/${guest.id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        alert(body.error ?? "No se pudo eliminar la confirmación.");
+        return;
+      }
+      router.refresh();
+    } finally {
+      setDeletingId(null);
+    }
   }
 
   return (
@@ -213,6 +240,21 @@ export function AdminDashboard({ guests }: { guests: WeddingGuestRow[] }) {
                   &ldquo;{g.message}&rdquo;
                 </p>
               )}
+              <div className="mt-4 flex gap-3">
+                <button
+                  onClick={() => setEditingGuest(g)}
+                  className="border border-olive px-4 py-2 font-sans text-xs uppercase tracking-[0.2em] text-olive hover:bg-olive hover:text-warm-white"
+                >
+                  Editar
+                </button>
+                <button
+                  onClick={() => handleDelete(g)}
+                  disabled={deletingId === g.id}
+                  className="border border-stone px-4 py-2 font-sans text-xs uppercase tracking-[0.2em] text-stone hover:border-red-700 hover:text-red-700 disabled:opacity-50"
+                >
+                  {deletingId === g.id ? "Eliminando..." : "Eliminar"}
+                </button>
+              </div>
             </div>
           ))}
           {filtered.length === 0 && (
@@ -224,7 +266,7 @@ export function AdminDashboard({ guests }: { guests: WeddingGuestRow[] }) {
 
         {/* Desktop: table */}
         <div className="mt-8 hidden overflow-x-auto sm:block">
-          <table className="w-full min-w-[900px] border-collapse text-left font-sans text-sm">
+          <table className="w-full min-w-[960px] border-collapse text-left font-sans text-sm">
             <thead>
               <tr className="border-b border-stone/40 text-xs uppercase tracking-[0.15em] text-stone">
                 <th className="py-3 pr-4">Nombre</th>
@@ -236,6 +278,7 @@ export function AdminDashboard({ guests }: { guests: WeddingGuestRow[] }) {
                 <th className="py-3 pr-4">Vuelta</th>
                 <th className="py-3 pr-4">Alimentación</th>
                 <th className="py-3 pr-4">Mensaje</th>
+                <th className="py-3 pr-4">Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -258,6 +301,23 @@ export function AdminDashboard({ guests }: { guests: WeddingGuestRow[] }) {
                   <td className="py-3 pr-4">{g.return_bus ?? "-"}</td>
                   <td className="py-3 pr-4">{g.dietary_requirements ?? "-"}</td>
                   <td className="py-3 pr-4">{g.message ?? "-"}</td>
+                  <td className="py-3 pr-4">
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => setEditingGuest(g)}
+                        className="border border-olive px-3 py-1.5 font-sans text-xs uppercase tracking-[0.15em] text-olive hover:bg-olive hover:text-warm-white"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => handleDelete(g)}
+                        disabled={deletingId === g.id}
+                        className="border border-stone px-3 py-1.5 font-sans text-xs uppercase tracking-[0.15em] text-stone hover:border-red-700 hover:text-red-700 disabled:opacity-50"
+                      >
+                        {deletingId === g.id ? "..." : "Eliminar"}
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -269,6 +329,17 @@ export function AdminDashboard({ guests }: { guests: WeddingGuestRow[] }) {
           )}
         </div>
       </div>
+
+      {editingGuest && (
+        <EditGuestModal
+          guest={editingGuest}
+          onClose={() => setEditingGuest(null)}
+          onSaved={() => {
+            setEditingGuest(null);
+            router.refresh();
+          }}
+        />
+      )}
     </div>
   );
 }
